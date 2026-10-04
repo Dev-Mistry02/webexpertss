@@ -40,6 +40,8 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 }
 
+const currentYear = new Date().getFullYear()
+
 function MagneticButton() {
   const buttonRef = useRef(null)
 
@@ -213,7 +215,7 @@ function App() {
       </main>
 
       <footer className="mx-auto flex w-full max-w-7xl flex-col justify-between gap-5 border-x border-b border-line px-5 py-8 text-sm text-steel sm:flex-row sm:px-8 lg:px-12">
-        <p>© {new Date().getFullYear()} WebExpertsa. Crafted for ambitious brands.</p>
+        <p>© {currentYear} WebExpertsa. Crafted for ambitious brands.</p>
         <p className="uppercase tracking-[0.15em]">hello@webexpertsa.com</p>
       </footer>
     </div>
