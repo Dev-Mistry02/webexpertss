@@ -5,8 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "npm --prefix server run dev",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",

@@ -1145,8 +1145,8 @@ h1 { margin: 0; font-size: clamp(3.6rem, 8.6vw, 9.2rem); line-height: .84; lette
 .headline-line > span { display: block; }
 .headline-line:nth-child(2) { margin-left: 0; }
 .headline-line:nth-child(3) { margin-left: 0; color: var(--accent); }
-.hero-bottom { display: flex; align-items: end; justify-content: center; width: fit-content; max-width: 100%; gap: 2.5rem; margin: 3.7rem auto 0; }
-.hero-bottom p { max-width: 280px; margin: 0; color: var(--muted); font-size: .83rem; line-height: 1.65; text-align: left; }
+.hero-bottom { display: flex; align-items: center; flex-direction: column; width: 100%; max-width: 100%; gap: 1.5rem; margin: 3.7rem auto 0; }
+.hero-bottom p { max-width: 420px; margin: 0; color: var(--muted); font-size: .83rem; line-height: 1.65; text-align: center; }
 .hero-actions { display: flex; justify-content: center; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
 .button { min-height: 42px; padding: .8rem 1rem; font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; transition: background .25s ease, color .25s ease; }
 .button--dark { background: var(--text); color: var(--bg); }
@@ -1251,6 +1251,7 @@ h1 { margin: 0; font-size: clamp(3.6rem, 8.6vw, 9.2rem); line-height: .84; lette
 .contact-submit:hover { gap: 1.2rem; background: var(--accent); transform: translateX(3px); }
 .contact-submit:disabled { cursor: wait; opacity: .65; }
 .contact-form-status { grid-column: 1 / -1; margin: 1rem 0 0 2.65rem; max-width: 420px; color: var(--accent); font-size: .78rem; line-height: 1.6; }
+.contact-form-status:not(.contact-form-status--error) { color: #55a777; }
 .contact-quick-chat { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding: 1.5rem 2rem; border: 1px solid var(--border); color: var(--bg); background: var(--text); }
 .contact-quick-chat__eyebrow { color: var(--accent); font: .58rem "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
 .contact-quick-chat p { margin: .55rem 0 0; color: color-mix(in srgb, var(--bg) 72%, transparent); font-size: .78rem; }

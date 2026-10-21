@@ -5,12 +5,12 @@ import { ArrowUpRight } from "lucide-react";
 const projects = [
   {
     number: "01",
-    name: "EquipTrade India",
+    name: "EquipTradeindia.com",
     category: "Marketplace",
     description: "Industrial equipment marketplace with OTP verification and modern listing system.",
     tags: ["React", "Node.js", "MongoDB", "Cloudinary"],
     image: "/projects/equiptrade.png",
-    href: "https://equiptrade.onrender.com",
+    href: "https://equiptradeindia.com",
   },
   {
     number: "02",

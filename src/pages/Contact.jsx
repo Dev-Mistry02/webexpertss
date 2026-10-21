@@ -43,6 +43,7 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState({});
   const [submitState, setSubmitState] = useState("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
   const reduceMotion = useReducedMotion();
 
   function updateField(event) {
@@ -50,6 +51,7 @@ export default function Contact() {
     setForm((current) => ({ ...current, [name]: value }));
     setErrors((current) => ({ ...current, [name]: "" }));
     setSubmitState("idle");
+    setSubmitMessage("");
   }
 
   function validate() {
@@ -67,12 +69,33 @@ export default function Contact() {
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       setSubmitState("idle");
+      setSubmitMessage("");
       return;
     }
 
     setSubmitState("sending");
-    // TODO: Connect to the webexpertss backend/contact API.
-    setSubmitState("unavailable");
+    setSubmitMessage("");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(result?.error || "We couldn't send your enquiry. Please try again shortly.");
+      }
+
+      setSubmitState("success");
+      setSubmitMessage(result?.message || "Thanks — your project enquiry has been sent.");
+      setForm(initialForm);
+    } catch (error) {
+      console.error("Contact form submission failed:", error);
+      setSubmitState("error");
+      setSubmitMessage(error instanceof Error
+        ? error.message
+        : "We couldn't send your enquiry. Please try again shortly.");
+    }
   }
 
   return (
@@ -165,7 +188,7 @@ export default function Contact() {
             <button className="contact-submit" type="submit" disabled={submitState === "sending"}>
               {submitState === "sending" ? "Sending..." : "Send project enquiry"} <ArrowUpRight size={20} />
             </button>
-            {submitState === "unavailable" && <p className="contact-form-status" role="status">The form is ready, but the contact API is not connected yet. Your message has not been sent.</p>}
+            {submitMessage && <p className={`contact-form-status${submitState === "error" ? " contact-form-status--error" : ""}`} role={submitState === "error" ? "alert" : "status"}>{submitMessage}</p>}
           </form>
         </section>
       </div>

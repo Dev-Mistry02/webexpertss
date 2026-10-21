@@ -115,7 +115,7 @@ function Navbar({ theme, onToggleTheme }) {
   const isPricingPage = window.location.pathname === "/pricing";
   const navigationHref = (link) => {
     if (link === "Home") return "/";
-    if (link === "Contact") return isContactPage ? "#contact-form" : "/contact#contact-form";
+    if (link === "Contact") return isContactPage ? "#contact-form" : "/contact";
     if (link === "Pricing") return "/pricing";
 
     const section = link === "Studio" ? "studio" : "services";
