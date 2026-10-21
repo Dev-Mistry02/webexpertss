@@ -14,6 +14,7 @@ const contactDetails = {
 };
 
 const WHATSAPP_URL = "https://wa.me/918141368777";
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "") || "";
 const projectTypes = ["Website", "Web Application", "UI/UX Design", "Branding", "Digital Solution", "Something Else"];
 const budgets = ["₹25K — ₹50K", "₹50K — ₹1L", "₹1L — ₹2L", "₹2L+", "Let's discuss"];
 
@@ -76,7 +77,7 @@ export default function Contact() {
     setSubmitState("sending");
     setSubmitMessage("");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(form),

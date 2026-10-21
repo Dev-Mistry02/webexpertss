@@ -14,6 +14,7 @@ try {
 
 const projectRoot = resolve(serverDirectory, "..");
 const distRoot = resolve(projectRoot, "dist");
+const clientOrigin = process.env.CLIENT_URL ? new URL(process.env.CLIENT_URL).origin : "";
 const maxRequestBytes = 12 * 1024;
 const allowedProjectTypes = new Set([
   "Website",
@@ -42,6 +43,32 @@ const contentTypes = {
 function sendJson(response, statusCode, payload) {
   response.writeHead(statusCode, { "content-type": "application/json; charset=utf-8" });
   response.end(JSON.stringify(payload));
+}
+
+function isAllowedOrigin(request) {
+  const origin = request.headers.origin;
+  if (!origin) return true;
+
+  let requestOrigin;
+  try {
+    requestOrigin = new URL(origin).origin;
+  } catch {
+    return false;
+  }
+
+  const forwardedProtocol = request.headers["x-forwarded-proto"]?.split(",")[0].trim();
+  const protocol = forwardedProtocol || "http";
+  const host = request.headers.host;
+  const sameOrigin = host && requestOrigin === `${protocol}://${host}`;
+  return sameOrigin || (clientOrigin && requestOrigin === clientOrigin);
+}
+
+function applyCorsHeaders(request, response) {
+  const origin = request.headers.origin;
+  if (origin && clientOrigin && new URL(origin).origin === clientOrigin) {
+    response.setHeader("access-control-allow-origin", clientOrigin);
+    response.setHeader("vary", "Origin");
+  }
 }
 
 async function readJsonBody(request) {
@@ -228,6 +255,22 @@ const server = createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://localhost");
     if (url.pathname === "/api/contact") {
+      if (!isAllowedOrigin(request)) {
+        sendJson(response, 403, { error: "This website is not allowed to submit the contact form." });
+        return;
+      }
+      applyCorsHeaders(request, response);
+
+      if (request.method === "OPTIONS") {
+        response.writeHead(204, {
+          allow: "POST, OPTIONS",
+          "access-control-allow-methods": "POST, OPTIONS",
+          "access-control-allow-headers": "content-type",
+        });
+        response.end();
+        return;
+      }
+
       if (request.method !== "POST") {
         response.setHeader("allow", "POST");
         sendJson(response, 405, { error: "Method not allowed." });
