@@ -14,7 +14,7 @@ const contactDetails = {
 };
 
 const WHATSAPP_URL = "https://wa.me/918141368777";
-const API_URL = (import.meta.env.VITE_API_URL ?? "https://webexpertss-backen.onrender.com").replace(/\/+$/, "");
+const API_URL = (import.meta.env.VITE_API_URL ?? "https://webexperts-backend.onrender.com").replace(/\/+$/, "");
 const projectTypes = ["Website", "Web Application", "UI/UX Design", "Branding", "Digital Solution", "Something Else"];
 const budgets = ["₹25K — ₹50K", "₹50K — ₹1L", "₹1L — ₹2L", "₹2L+", "Let's discuss"];
 
