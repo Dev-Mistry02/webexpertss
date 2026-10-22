@@ -149,7 +149,7 @@ function Navbar({ theme, onToggleTheme }) {
 
           <div className="nav-tools">
             <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-            <MagneticLink className="nav-cta">
+            <MagneticLink className="nav-cta" href={navigationHref("Contact")}>
               <span>Start a project</span>
               <ArrowUpRight size={15} strokeWidth={1.8} />
             </MagneticLink>
