@@ -36,7 +36,7 @@ function PageTransition() {
   );
 }
 
-function MagneticLink({ children, className = "", href = "#contact-form" }) {
+function MagneticLink({ children, className = "", href = contactPath }) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   function handlePointerMove(event) {
