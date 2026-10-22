@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 
 
 const links = ["Home", "Services", "Studio", "Pricing", "Contact"];
+const contactPath = "/contact/";
 const currentPath = () => window.location.pathname.replace(/\/+$/, "") || "/";
 
 function PageTransition() {
@@ -117,7 +118,7 @@ function Navbar({ theme, onToggleTheme }) {
   const isPricingPage = pathname === "/pricing";
   const navigationHref = (link) => {
     if (link === "Home") return "/";
-    if (link === "Contact") return isContactPage ? "#contact-form" : "/contact";
+    if (link === "Contact") return isContactPage ? "#contact-form" : contactPath;
     if (link === "Pricing") return "/pricing";
 
     const section = link === "Studio" ? "studio" : "services";
@@ -197,7 +198,7 @@ function Navbar({ theme, onToggleTheme }) {
                 </motion.a>
               ))}
             </div>
-            <a className="mobile-menu__cta" href={isContactPage ? "#contact-form" : "/contact#contact-form"} onClick={() => setMenuOpen(false)}>
+            <a className="mobile-menu__cta" href={isContactPage ? "#contact-form" : `${contactPath}#contact-form`} onClick={() => setMenuOpen(false)}>
               Start a project <ArrowUpRight size={18} />
             </a>
           </motion.div>
