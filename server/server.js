@@ -14,7 +14,19 @@ try {
 
 const projectRoot = resolve(serverDirectory, "..");
 const distRoot = resolve(projectRoot, "dist");
-const clientOrigin = process.env.CLIENT_URL ? new URL(process.env.CLIENT_URL).origin : "";
+const clientOrigins = new Set(
+  (process.env.CLIENT_URL || "")
+    .split(",")
+    .map((url) => url.trim())
+    .filter(Boolean)
+    .map((url) => {
+      const parsedUrl = new URL(url);
+      if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+        throw new Error("CLIENT_URL entries must use http or https.");
+      }
+      return parsedUrl.origin;
+    }),
+);
 const maxRequestBytes = 12 * 1024;
 const allowedProjectTypes = new Set([
   "Website",
@@ -60,13 +72,13 @@ function isAllowedOrigin(request) {
   const protocol = forwardedProtocol || "http";
   const host = request.headers.host;
   const sameOrigin = host && requestOrigin === `${protocol}://${host}`;
-  return sameOrigin || (clientOrigin && requestOrigin === clientOrigin);
+  return sameOrigin || clientOrigins.has(requestOrigin);
 }
 
 function applyCorsHeaders(request, response) {
-  const origin = request.headers.origin;
-  if (origin && clientOrigin && new URL(origin).origin === clientOrigin) {
-    response.setHeader("access-control-allow-origin", clientOrigin);
+  const requestOrigin = request.headers.origin ? new URL(request.headers.origin).origin : "";
+  if (clientOrigins.has(requestOrigin)) {
+    response.setHeader("access-control-allow-origin", requestOrigin);
     response.setHeader("vary", "Origin");
   }
 }
@@ -298,10 +310,19 @@ const server = createServer(async (request, response) => {
   }
 });
 
-const port = Number(process.env.PORT || 3000);
+const port = Number(process.env.PORT || 3001);
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   throw new Error("PORT must be a valid TCP port.");
 }
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${port} is already in use. Set PORT to another available port and try again.`);
+    process.exitCode = 1;
+    return;
+  }
+  throw error;
+});
 
 server.listen(port, "0.0.0.0", () => {
   console.log(`webexpertss server listening on port ${port}`);

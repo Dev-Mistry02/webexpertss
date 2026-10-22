@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 
 
 const links = ["Home", "Services", "Studio", "Pricing", "Contact"];
+const currentPath = () => window.location.pathname.replace(/\/+$/, "") || "/";
 
 function PageTransition() {
   const reduceMotion = useReducedMotion();
@@ -86,7 +87,7 @@ function Navbar({ theme, onToggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   function handleHomeClick(event) {
-    if (window.location.pathname === "/") {
+    if (currentPath() === "/") {
       event.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -110,9 +111,10 @@ function Navbar({ theme, onToggleTheme }) {
     };
   }, [menuOpen]);
 
-  const isHomePage = window.location.pathname === "/";
-  const isContactPage = window.location.pathname === "/contact";
-  const isPricingPage = window.location.pathname === "/pricing";
+  const pathname = currentPath();
+  const isHomePage = pathname === "/";
+  const isContactPage = pathname === "/contact";
+  const isPricingPage = pathname === "/pricing";
   const navigationHref = (link) => {
     if (link === "Home") return "/";
     if (link === "Contact") return isContactPage ? "#contact-form" : "/contact";
@@ -300,6 +302,7 @@ function Hero() {
 }
 
 export default function App() {
+  const pathname = currentPath();
   const [theme, setTheme] = useState(() => {
     const savedTheme = window.localStorage.getItem("webexpertss-theme");
     if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
@@ -341,17 +344,17 @@ export default function App() {
     <>
       <PageTransition />
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
-      {window.location.pathname === "/work" || window.location.pathname === "/our-work" ? (
+      {pathname === "/work" || pathname === "/our-work" ? (
         <>
           <Work />
           <Footer />
         </>
-      ) : window.location.pathname === "/pricing" ? (
+      ) : pathname === "/pricing" ? (
         <>
           <Pricing />
           <Footer />
         </>
-      ) : window.location.pathname === "/contact" ? (
+      ) : pathname === "/contact" ? (
         <>
           <Contact />
           <Footer />
