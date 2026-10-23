@@ -25,7 +25,7 @@ const projects = [
   {
     number: "03",
     name: "Appointment Management",
-    category: "Marketplace",
+    category: "Dashboard",
     description: "Industrial equipment marketplace with OTP verification and modern listing system.",
     tags: ["React", "Node.js", "MongoDB", "Cloudinary"],
     image: "/projects/dental.png",
