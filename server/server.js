@@ -85,8 +85,8 @@ function applyCorsHeaders(request, response) {
 
 async function readJsonBody(request) {
   const contentType = request.headers["content-type"]?.split(";")[0].trim().toLowerCase();
-  if (contentType !== "application/json") {
-    const error = new Error("Request content type must be application/json.");
+  if (contentType !== "application/json" && contentType !== "text/plain") {
+    const error = new Error("Request content type must be application/json or text/plain.");
     error.statusCode = 415;
     throw error;
   }

@@ -1250,8 +1250,15 @@ h1 { margin: 0; font-size: clamp(3.6rem, 8.6vw, 9.2rem); line-height: .84; lette
 .contact-submit { grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; gap: .8rem; margin: .5rem 0 0 2.65rem; padding: 1rem 1.3rem; color: var(--bg); border: 1px solid var(--text); background: var(--text); font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: gap .3s ease, background .3s ease, transform .3s ease; }
 .contact-submit:hover { gap: 1.2rem; background: var(--accent); transform: translateX(3px); }
 .contact-submit:disabled { cursor: wait; opacity: .65; }
+.contact-submit.is-sending:hover { gap: .8rem; transform: none; }
+.contact-submit__spinner { animation: contact-spinner .9s linear infinite; }
 .contact-form-status { grid-column: 1 / -1; margin: 1rem 0 0 2.65rem; max-width: 420px; color: var(--accent); font-size: .78rem; line-height: 1.6; }
 .contact-form-status:not(.contact-form-status--error) { color: #55a777; }
+.contact-form-status--sending { color: var(--muted); }
+.contact-form-status__progress { display: block; position: relative; width: min(100%, 18rem); height: 2px; margin-top: .65rem; overflow: hidden; background: var(--border); }
+.contact-form-status__progress span { position: absolute; inset: 0 auto 0 -40%; width: 40%; background: var(--accent); animation: contact-progress 1.4s ease-in-out infinite; }
+@keyframes contact-spinner { to { transform: rotate(360deg); } }
+@keyframes contact-progress { to { transform: translateX(350%); } }
 .contact-quick-chat { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding: 1.5rem 2rem; border: 1px solid var(--border); color: var(--bg); background: var(--text); }
 .contact-quick-chat__eyebrow { color: var(--accent); font: .58rem "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
 .contact-quick-chat p { margin: .55rem 0 0; color: color-mix(in srgb, var(--bg) 72%, transparent); font-size: .78rem; }
@@ -1285,6 +1292,11 @@ h1 { margin: 0; font-size: clamp(3.6rem, 8.6vw, 9.2rem); line-height: .84; lette
   .contact-field:nth-of-type(6), .contact-submit, .contact-form-status { grid-column: 1; }
   .contact-submit, .contact-form-status { margin-left: 0; }
   .contact-quick-chat { flex-direction: column; gap: 1.3rem; padding: 1.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-submit__spinner,
+  .contact-form-status__progress span { animation: none; }
 }
 
 .work-page { max-width: 1440px; margin: 0 auto; padding: 10rem 4.2vw 7rem; }

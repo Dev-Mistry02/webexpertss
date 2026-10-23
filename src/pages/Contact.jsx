@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Github, Instagram, Linkedin, Mail, MessageCircle } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Github, Instagram, Linkedin, LoaderCircle, Mail, MessageCircle } from "lucide-react";
 
 const contactDetails = {
   email: "hello@webexpertss.com",
@@ -75,11 +75,11 @@ export default function Contact() {
     }
 
     setSubmitState("sending");
-    setSubmitMessage("");
+    setSubmitMessage("Sending your enquiry...");
     try {
       const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "text/plain;charset=UTF-8" },
         body: JSON.stringify(form),
       });
       const result = await response.json().catch(() => null);
@@ -186,10 +186,18 @@ export default function Contact() {
             <Field number="06" label="Tell us about the project" name="message" value={form.message} onChange={updateField} error={errors.message}>
               <textarea id="message" name="message" value={form.message} onChange={updateField} placeholder="Tell us what you're building, what problem you're solving, and what you have in mind..." rows="5" />
             </Field>
-            <button className="contact-submit" type="submit" disabled={submitState === "sending"}>
-              {submitState === "sending" ? "Sending..." : "Send project enquiry"} <ArrowUpRight size={20} />
+            <button className={`contact-submit${submitState === "sending" ? " is-sending" : ""}`} type="submit" disabled={submitState === "sending"} aria-busy={submitState === "sending"}>
+              {submitState === "sending" ? "Sending..." : "Send project enquiry"}
+              {submitState === "sending"
+                ? <LoaderCircle className="contact-submit__spinner" size={20} aria-hidden="true" />
+                : <ArrowUpRight size={20} aria-hidden="true" />}
             </button>
-            {submitMessage && <p className={`contact-form-status${submitState === "error" ? " contact-form-status--error" : ""}`} role={submitState === "error" ? "alert" : "status"}>{submitMessage}</p>}
+            {submitMessage && (
+              <p className={`contact-form-status${submitState === "error" ? " contact-form-status--error" : ""}${submitState === "sending" ? " contact-form-status--sending" : ""}`} role={submitState === "error" ? "alert" : "status"} aria-live={submitState === "error" ? "assertive" : "polite"}>
+                {submitMessage}
+                {submitState === "sending" && <span className="contact-form-status__progress" aria-hidden="true"><span /></span>}
+              </p>
+            )}
           </form>
         </section>
       </div>
