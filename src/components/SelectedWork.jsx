@@ -21,6 +21,16 @@ const projects = [
     image: "/projects/alex-studio.png",
     href: "https://alex-1-4pcw.onrender.com",
   },
+  
+  {
+    number: "03",
+    name: "Appointment Management",
+    category: "Marketplace",
+    description: "Industrial equipment marketplace with OTP verification and modern listing system.",
+    tags: ["React", "Node.js", "MongoDB", "Cloudinary"],
+    image: "/projects/dental.png",
+    href: "https://appointmentsystemdemo.onrender.com/",
+  },
 ];
 
 export default function SelectedWork() {
