@@ -217,7 +217,7 @@ export default function Pricing() {
           <h2 id="pricing-cta-title">Have a unique idea?<br /><em>Let’s build it.</em></h2>
           <p>Tell us what you’re imagining. We’ll help you find the right approach, team and investment.</p>
           <div className="pricing-cta__actions">
-            <a className="pricing-cta__primary" href={contactHref("Custom Solutions")}>Start a project <ArrowUpRight size={18} /></a>
+            <a className="pricing-cta__primary" href="/estimator">Get Free Estimate <ArrowUpRight size={18} /></a>
             <a className="pricing-cta__secondary" href={whatsappHref("a custom project")} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp inquiry</a>
           </div>
         </Reveal>

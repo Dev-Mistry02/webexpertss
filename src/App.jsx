@@ -8,10 +8,11 @@ import Studio from "./components/Studio";
 import Work from "./pages/Work";
 import Contact from "./pages/Contact";
 import Pricing from "./pages/Pricing";
+import Estimator from "./pages/Estimator";
 import Footer from "./components/Footer";
 
 
-const links = ["Home", "Services", "Studio", "Pricing", "Contact"];
+const links = ["Home", "Services", "Studio", "Pricing", "Estimator", "Contact"];
 const contactPath = "/contact/";
 const currentPath = () => window.location.pathname.replace(/\/+$/, "") || "/";
 
@@ -120,6 +121,7 @@ function Navbar({ theme, onToggleTheme }) {
     if (link === "Home") return "/";
     if (link === "Contact") return isContactPage ? "#contact-form" : contactPath;
     if (link === "Pricing") return "/pricing";
+    if (link === "Estimator") return "/estimator";
 
     const section = link === "Studio" ? "studio" : "services";
     return isHomePage ? `#${section}` : `/#${section}`;
@@ -149,8 +151,8 @@ function Navbar({ theme, onToggleTheme }) {
 
           <div className="nav-tools">
             <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-            <MagneticLink className="nav-cta" href={navigationHref("Contact")}>
-              <span>Start a project</span>
+            <MagneticLink className="nav-cta" href="/estimator">
+              <span>Get Free Estimate</span>
               <ArrowUpRight size={15} strokeWidth={1.8} />
             </MagneticLink>
           </div>
@@ -291,7 +293,7 @@ function Hero() {
             <p>webexpertss is a digital agency creating powerful websites, digital products and brands for businesses ready to move forward.</p>
             <div className="hero-actions">
               <MagneticLink href="#work" className="button button--dark">View our work <ArrowUpRight size={17} /></MagneticLink>
-              <MagneticLink className="button button--line">Start a project <ArrowUpRight size={17} /></MagneticLink>
+              <MagneticLink className="button button--line" href="/estimator">Get Free Estimate <ArrowUpRight size={17} /></MagneticLink>
             </div>
           </div>
         </div>
@@ -353,6 +355,11 @@ export default function App() {
       ) : pathname === "/pricing" ? (
         <>
           <Pricing />
+          <Footer />
+        </>
+      ) : pathname === "/estimator" ? (
+        <>
+          <Estimator />
           <Footer />
         </>
       ) : pathname === "/contact" ? (

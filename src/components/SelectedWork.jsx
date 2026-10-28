@@ -26,7 +26,7 @@ const projects = [
     number: "03",
     name: "Appointment Management",
     category: "Dashboard",
-    description: "Industrial equipment marketplace with OTP verification and modern listing system.",
+    description: "patient management system.",
     tags: ["React", "Node.js", "MongoDB", "Cloudinary"],
     image: "/projects/dental.png",
     href: "https://appointmentsystemdemo.onrender.com/",

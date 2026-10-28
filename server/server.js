@@ -292,6 +292,54 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    if (url.pathname === "/api/estimates/calculate") {
+      if (!isAllowedOrigin(request)) {
+        sendJson(response, 403, { error: "Not allowed." });
+        return;
+      }
+      applyCorsHeaders(request, response);
+      if (request.method === "OPTIONS") {
+        response.writeHead(204, {
+          allow: "POST, OPTIONS",
+          "access-control-allow-methods": "POST, OPTIONS",
+          "access-control-allow-headers": "content-type",
+        });
+        response.end();
+        return;
+      }
+      if (request.method !== "POST") {
+        response.setHeader("allow", "POST");
+        sendJson(response, 405, { error: "Method not allowed." });
+        return;
+      }
+      await handleEstimateCalculate(request, response);
+      return;
+    }
+
+    if (url.pathname === "/api/leads") {
+      if (!isAllowedOrigin(request)) {
+        sendJson(response, 403, { error: "Not allowed." });
+        return;
+      }
+      applyCorsHeaders(request, response);
+      if (request.method === "OPTIONS") {
+        response.writeHead(204, {
+          allow: "POST, OPTIONS",
+          "access-control-allow-methods": "POST, OPTIONS",
+          "access-control-allow-headers": "content-type",
+        });
+        response.end();
+        return;
+      }
+      if (request.method !== "POST") {
+        response.setHeader("allow", "POST");
+        sendJson(response, 405, { error: "Method not allowed." });
+        return;
+      }
+      await handleEstimateLead(request, response);
+      return;
+    }
+
     if (url.pathname.startsWith("/api/")) {
       sendJson(response, 404, { error: "Not found." });
       return;
@@ -327,3 +375,95 @@ server.on("error", (error) => {
 server.listen(port, "0.0.0.0", () => {
   console.log(`webexpertss server listening on port ${port}`);
 });
+
+// Estimator endpoints
+import { calculateEstimate } from "./estimator/pricingEngine.js";
+import { interpretRequirements } from "./estimator/aiService.js";
+import { randomBytes } from "node:crypto";
+
+const estimatorLeads = [];
+
+function isEstimatorAllowedOrigin(request) {
+  const origin = request.headers.origin;
+  if (!origin) return true;
+  let requestOrigin;
+  try {
+    requestOrigin = new URL(origin).origin;
+  } catch {
+    return false;
+  }
+  const forwardedProtocol = request.headers["x-forwarded-proto"]?.split(",")[0].trim();
+  const protocol = forwardedProtocol || "http";
+  const host = request.headers.host;
+  const sameOrigin = host && requestOrigin === `${protocol}://${host}`;
+  return sameOrigin || clientOrigins.has(requestOrigin);
+}
+
+async function handleEstimateCalculate(request, response) {
+  let body;
+  try {
+    body = await readJsonBody(request);
+  } catch (error) {
+    sendJson(response, error.statusCode || 400, { error: error.message });
+    return;
+  }
+
+  if (!body || typeof body !== "object") {
+    sendJson(response, 400, { error: "Invalid request" });
+    return;
+  }
+
+  try {
+    const estimate = calculateEstimate(body);
+    const aiInterpretation = await interpretRequirements(body, estimate);
+    const estimateId = `EST-${randomBytes(4).toString('hex').toUpperCase()}`;
+    
+    sendJson(response, 200, {
+      estimate,
+      aiInterpretation,
+      estimateId,
+      calculatedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Estimate calculation failed:", error);
+    sendJson(response, 500, { error: "Failed to calculate estimate" });
+  }
+}
+
+async function handleEstimateLead(request, response) {
+  let body;
+  try {
+    body = await readJsonBody(request);
+  } catch (error) {
+    sendJson(response, error.statusCode || 400, { error: error.message });
+    return;
+  }
+
+  if (!body || typeof body !== "object") {
+    sendJson(response, 400, { error: "Invalid request" });
+    return;
+  }
+
+  const { name, email, projectDescription, consent } = body;
+  if (!name?.trim() || !email?.trim() || !projectDescription?.trim() || !consent) {
+    sendJson(response, 400, { error: "All required fields must be provided" });
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    sendJson(response, 400, { error: "Invalid email" });
+    return;
+  }
+
+  const lead = {
+    id: `LEAD-${randomBytes(4).toString('hex').toUpperCase()}`,
+    ...body,
+    createdAt: new Date().toISOString(),
+  };
+  estimatorLeads.push(lead);
+  console.log("New estimator lead:", lead.id);
+
+  sendJson(response, 200, {
+    message: "Quote request submitted successfully",
+    leadId: lead.id,
+  });
+}

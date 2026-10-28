@@ -264,7 +264,7 @@ export default function Work() {
         <div className="work-showcase-cta__eyebrow">Your turn / 04</div>
         <h2>LET&apos;S MAKE<br />THE NEXT ONE<br /><em>YOURS.</em></h2>
         <p>Have a project in mind? Let&apos;s build something worth remembering.</p>
-        <a href="/contact">Start a project <ArrowUpRight size={18} /></a>
+        <a href="/estimator">Get Free Estimate <ArrowUpRight size={18} /></a>
       </motion.section>
     </main>
   );

@@ -73,8 +73,8 @@ export default function Footer() {
             </a>
             <h2>Do you like<br />what you see?</h2>
             <div className="footer-reference__cta-row">
-              <a className="footer-reference__cta" href="/contact">
-                Start a project <ArrowUpRight size={17} />
+              <a className="footer-reference__cta" href="/estimator">
+                Get Free Estimate <ArrowUpRight size={17} />
               </a>
               <span>Thoughtful work.<br />Built around your brief.</span>
             </div>

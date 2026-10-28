@@ -148,9 +148,9 @@ export default function Contact() {
           transition={{ duration: reduceMotion ? 0 : .8, delay: reduceMotion ? 0 : .35 }}
         >
           <p>Have an idea, a problem to solve, or a project in mind? Tell us what you&apos;re thinking.</p>
-          <a className="contact-page__hero-link" href="#contact-form">
-            Tell us about it <ArrowDown size={16} />
-          </a>
+            <a href="/estimator" className="contact-page__hero-link">
+              Get Free Estimate <ArrowDown size={16} />
+            </a>
           <span className="contact-page__hero-index">Independent digital studio / India</span>
         </motion.div>
       </section>
