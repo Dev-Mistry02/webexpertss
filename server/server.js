@@ -179,7 +179,7 @@ async function handleContactRequest(request, response) {
 
   const { name, email, company, type, budget, message } = result.details;
   const emailText = [
-    "A new project enquiry was submitted on webexpertss.com.",
+    "A new project enquiry was submitted on webexpertss.tech.",
     "",
     `Name: ${name}`,
     `Email: ${email}`,
@@ -190,6 +190,26 @@ async function handleContactRequest(request, response) {
     "Project details:",
     message,
   ].join("\n");
+
+  const emailHtml = `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#0b0b0f;font-family:Arial,sans-serif;color:#f5f5f5;">
+    <div style="max-width:600px;margin:0 auto;background:#15151c;border:1px solid #2a2a35;border-radius:12px;overflow:hidden;">
+      <div style="padding:24px 28px;background:linear-gradient(135deg,#6d5cff,#ff5ca8);color:#fff;">
+        <h1 style="margin:0;font-size:22px;">New Project Enquiry</h1>
+        <p style="margin:6px 0 0;opacity:.9;">webexpertss.tech</p>
+      </div>
+      <div style="padding:24px 28px;">
+        <table style="width:100%;border-collapse:collapse;">
+          <tr><td style="padding:8px 0;color:#9a9aa8;">Name</td><td style="padding:8px 0;">${name}</td></tr>
+          <tr><td style="padding:8px 0;color:#9a9aa8;">Email</td><td style="padding:8px 0;"><a href="mailto:${email}" style="color:#6d5cff;">${email}</a></td></tr>
+          <tr><td style="padding:8px 0;color:#9a9aa8;">Company</td><td style="padding:8px 0;">${company || "Not provided"}</td></tr>
+          <tr><td style="padding:8px 0;color:#9a9aa8;">Project type</td><td style="padding:8px 0;">${type}</td></tr>
+          <tr><td style="padding:8px 0;color:#9a9aa8;">Budget</td><td style="padding:8px 0;">${budget || "Not provided"}</td></tr>
+        </table>
+        <h3 style="margin:20px 0 8px;color:#9a9aa8;">Project details</h3>
+        <p style="white-space:pre-wrap;margin:0;line-height:1.6;">${message}</p>
+      </div>
+    </div>
+  </body></html>`;
 
   try {
     const resendResponse = await fetch("https://api.resend.com/emails", {
@@ -204,6 +224,7 @@ async function handleContactRequest(request, response) {
         reply_to: email,
         subject: `New project enquiry from ${name}`,
         text: emailText,
+        html: emailHtml,
       }),
     });
     const resendResult = await resendResponse.json().catch(() => ({}));
