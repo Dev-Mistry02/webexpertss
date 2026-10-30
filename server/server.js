@@ -340,6 +340,11 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    if (url.pathname === "/api/health") {
+      sendJson(response, 200, { status: "ok" });
+      return;
+    }
+
     if (url.pathname.startsWith("/api/")) {
       sendJson(response, 404, { error: "Not found." });
       return;

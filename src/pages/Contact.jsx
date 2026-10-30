@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Github, Instagram, Linkedin, LoaderCircle, Mail, MessageCircle } from "lucide-react";
 
 const contactDetails = {
-  email: "hello@webexpertss.com",
+  email: "mistrydev812@gmail.com",
   location: "India",
   availability: "Available for selected projects",
   socials: [

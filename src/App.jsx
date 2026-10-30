@@ -11,6 +11,8 @@ import Pricing from "./pages/Pricing";
 import Estimator from "./pages/Estimator";
 import Footer from "./components/Footer";
 
+const API_URL = (import.meta.env.VITE_API_URL ?? "").replace(/\/+$/, "");
+
 
 const links = ["Home", "Services", "Studio", "Pricing", "Estimator", "Contact"];
 const contactPath = "/contact/";
@@ -317,6 +319,10 @@ export default function App() {
     document.documentElement.dataset.theme = theme;
     window.localStorage.setItem("webexpertss-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/health`).catch(() => {});
+  }, []);
 
   function toggleTheme(event) {
     const nextTheme = theme === "dark" ? "light" : "dark";
